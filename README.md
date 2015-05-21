@@ -9,8 +9,8 @@ and unzip it. In the uncompressed directory, locate and run the file named 'simu
 
 # License
 The MIT License (MIT)
-
-Copyright (c) 2015 Ryan Brigden
+ 
+Copyright (c) 2015 [Ryan Brigden] (http://andrew.cmu.edu/user/rbrigden)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
