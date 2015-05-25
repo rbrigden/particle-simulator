@@ -15,6 +15,8 @@ class Particle{
   float charge;
   float mass;
   
+  // constant 1/(4piE_0)
+  float k = 900; 
   
   public Particle() {
     xpos = 30;
@@ -32,11 +34,10 @@ class Particle{
     yspeed = yspd;
     charge = q;
     mass = m;
-    
   }
   
   
-  public void update(float dt, ArrayList<MagneticField> mag_fields, ArrayList<ElectricField> electric_fields){
+  public void update(float dt, ArrayList<MagneticField> mag_fields, ArrayList<ElectricField> electric_fields, ArrayList<Particle> particles){
     // test for inclusiveness and accelerate inside the magnetic field
     for (MagneticField field : mag_fields){
       if (inMagField(field)){
@@ -45,15 +46,21 @@ class Particle{
      }
      
      // test for inclusiveness and accelerate inside the electric field
-      for (ElectricField field : electric_fields){
+    for (ElectricField field : electric_fields){
       if (inElectricField(field)){
           accelerateInElectricField(dt, field);
         }
-     }
-     
-     sides();
-     xpos += xspeed * dt;
-     ypos += yspeed * dt;
+    }
+      
+
+    for (Particle particle : particles)
+    {
+      accelerateInChargeField(dt, particle);
+    }
+
+    sides();
+    xpos += xspeed * dt;
+    ypos += yspeed * dt;
   }
   
   private void sides(){
@@ -107,14 +114,44 @@ class Particle{
     yspeed += yacc * dt;
   }
   
+  private void accelerateInChargeField(float dt, Particle other)
+  {
+    float r = getDist(xpos, ypos, other.xpos, other.ypos);
+    
+    if (!Float.isNaN(r))
+    {
+      float rx = 0;
+      float ry = 0;
+      //  unit vector
+      if (r > 1){
+      rx = (xpos - other.xpos) / r;
+      ry = (ypos - other.ypos) / r;
+      }
+      // magnitude of acceleration 
+      float acc = 0;
+      if (r > 1){
+      acc = k * (charge * other.charge)/(r*r);
+      }
+      // accelearation in the direction of the radius unit vector
+      xspeed += acc * rx * dt;
+      yspeed += acc * ry * dt;
+    }
+  }
+
   // accelerate this particle in a given electric field
   private void accelerateInElectricField(float dt, ElectricField field){
     float xacc = (field.strength * charge) / mass;
+    // if field is not in the rightward direction
     if (!field.right){
       xacc *= -1;
     }
     
     xspeed += xacc * dt;   
+  }
+  
+  private float getDist(float x1, float y1, float x2, float y2)
+  {
+    return (float) Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
   }
   
   
@@ -129,6 +166,7 @@ class Particle{
     float speed = getMagnitude(xspeed, yspeed);
     return (charge * speed * field.strength * -1) / mass;
   }
+  
   
 }
 
