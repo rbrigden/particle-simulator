@@ -71,4 +71,9 @@ class MagneticField {
     y2 = y2_0;  
   }
   
+  void updateStrength(float multiplier)
+  {
+    strength *= multiplier;
+  }
+  
 }

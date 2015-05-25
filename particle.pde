@@ -169,5 +169,14 @@ class Particle{
       return (float) Math.sqrt(a * a + b * b);
   }
   
+  public String halt()
+  {
+    xspeed = 0;
+    yspeed = 0;
+    xpos = 0;
+    ypos = 0;
+    return "particle halted";
+  }
+  
 }
 

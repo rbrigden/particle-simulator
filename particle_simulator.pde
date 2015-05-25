@@ -7,6 +7,7 @@
 //  https://processing.org/examples/spring.html
 //  https://processing.org/examples/multipleparticlesystems.html
 //  https://processing.org/examples/button.html
+//  http://www.lagers.org.uk/g4p/
 //  Asked Jake Herman about implementing multiple particles in simulation, advised me to separate update and draw methods.
 //  He also helped me implement a technique to update the acceleration many times between frames in order to increase accuracy.
 //  Abhinav Venigalla taught me how to change the color of specific objects (in this case the particles) by turning the fill on
@@ -17,11 +18,16 @@
 // MagneticField (xpos, ypos, height, width, strength)
 // ElectricField (xpos, ypos, height, width, strength, direction (boolean) )
 
-import controlP5.*;
+// GUI package for Processing
+import g4p_controls.*;
+
+GSlider sdr;
 
 ArrayList<Particle> particles;
 ArrayList<MagneticField> mag_fields;
 ArrayList<ElectricField> electric_fields;
+
+boolean inCycle;
 
 void setup() {
   // initialize particle and field lists
@@ -54,9 +60,11 @@ void setup() {
 void draw() {
   background(155);
 
-  // build magnetic fields
+  // build  and update magnetic fields
   for (MagneticField field : mag_fields) {
     field.buildField();
+    if (inCycle)
+      field.updateStrength(sdr.getValueF());
   }
 
   // build electric fields
@@ -77,7 +85,6 @@ void draw() {
         }
       }
       p.update(dt, mag_fields, electric_fields, temp);
-//      System.out.println(p.xpos + " " + p.ypos);
     }
 
     // if negatively charged
@@ -101,6 +108,30 @@ void draw() {
       ellipse(p.xpos, p.ypos, rad, rad);
     }
   }
+  
+  // display velocity of particle for cyclotron
+  if (inCycle)
+  {
+    Particle p = particles.get(0);
+    String str = "Speed: " + getMagnitude(p.xspeed, p.yspeed);
+    textSize(32);
+    fill(0, 102, 153);
+    text(str, 100, 100); 
+    if (p.xpos > width - 5 || p.xpos < 10 || p.ypos > height - 10 || p.ypos < 10)
+    {
+      textSize(40);
+      fill(250, 0, 0);
+      String response = p.halt();
+      text(response, width/2 - 150, height/2); 
+    }
+    textSize(18);
+    fill(0, 102, 153);
+    String multiplier = "Field Multiplier: " + sdr.getValueF();
+    text(multiplier, 70, height - 110  );
+    
+  }
+  
+  System.out.println(sdr.getValueF());
 }
 
 void addRandomParticles(int num)
@@ -128,6 +159,7 @@ void demo()
 
 void cyclotron()
 {
+  inCycle = true;
   // add magnetic fields to system
   mag_fields.add(new MagneticField(0, 0, 640, 500, 6));
   mag_fields.add(new MagneticField(750, 0, 640, 500, 6)); 
@@ -139,6 +171,29 @@ void cyclotron()
   // add particles
   particles.add(new Particle(600, 300, -4, 0, 1, 20));
   
-  
+  // configure slider
+  sdr = new GSlider(this, 55, height - 100, 200, 100, 15);  
+  sdr.setLocalColorScheme(5); 
+  sdr.setLimits(1,1.01);
+  sdr.setOpaque(false); 
+  sdr.setValue(1); 
+  sdr.setNbrTicks(2); 
+  sdr.setShowLimits(false); 
+  sdr.setShowValue(false); 
+  sdr.setShowTicks(false); 
+  sdr.setStickToTicks(false); 
+  sdr.setEasing(1.0); 
+  sdr.setRotation(0.0, GControlMode.CENTER); 
+
 }
+
+// magnitude of a vector
+float getMagnitude(float a, float b){
+    return (float) Math.sqrt(a * a + b * b);
+}
+
+
+
+
+
 
