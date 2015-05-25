@@ -16,7 +16,7 @@ class Particle{
   float mass;
   
   // constant 1/(4piE_0)
-  float k = 900; 
+  float k = 4000; 
  
   
   public Particle() {

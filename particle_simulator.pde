@@ -39,11 +39,14 @@ void setup() {
   size(1280, 640);
   stroke(255);
 
-  // start demo system
+  // demo system
 //  demo();
   
-  // start cyclotron
-  cyclotron();
+  // cyclotron system
+//  cyclotron();
+
+  // custom system
+  custom();
 
   // add particles to the system
   float xi = width/2;
@@ -58,6 +61,7 @@ void setup() {
 }
 
 void draw() {
+  
   background(155);
 
   // build  and update magnetic fields
@@ -131,7 +135,6 @@ void draw() {
     
   }
   
-  System.out.println(sdr.getValueF());
 }
 
 void addRandomParticles(int num)
@@ -141,6 +144,11 @@ void addRandomParticles(int num)
     particles.add(new Particle((float) Math.random() * width, (float) Math.random() * height, (float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10,
     (Math.random() > 0.5) ? -1.0 : 1.0, 20));
   }
+}
+
+// magnitude of a vector
+float getMagnitude(float a, float b){
+    return (float) Math.sqrt(a * a + b * b);
 }
 
 // Below are a series of different field systems
@@ -187,10 +195,19 @@ void cyclotron()
 
 }
 
-// magnitude of a vector
-float getMagnitude(float a, float b){
-    return (float) Math.sqrt(a * a + b * b);
+// custom system
+void custom(){
+//    // add magnetic fields to the system
+//  mag_fields.add(new MagneticField(0, 160, 320, 400, 1));
+//  mag_fields.add(new MagneticField(880, 160, 320, 400, 1));
+//
+//  // add electric fields to the system
+//  electric_fields.add(new ElectricField(width/4 + 150, height/4, 300, 400, 5, true));
+  addRandomParticles(10);
+
 }
+
+
 
 
 
