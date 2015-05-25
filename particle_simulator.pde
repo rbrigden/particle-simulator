@@ -12,17 +12,19 @@
 //  Abhinav Venigalla taught me how to change the color of specific objects (in this case the particles) by turning the fill on
 //  before drawing and then switching it off immediately afterwards.
 
-// Class Descriptions:
+// Class Constructors:
 // Particle (xpos, ypos, xspeed, yspeed, charge, mass)
 // MagneticField (xpos, ypos, height, width, strength)
 // ElectricField (xpos, ypos, height, width, strength, direction (boolean) )
+
+import controlP5.*;
 
 ArrayList<Particle> particles;
 ArrayList<MagneticField> mag_fields;
 ArrayList<ElectricField> electric_fields;
 
 void setup() {
-  // initialize particles and fields
+  // initialize particle and field lists
   particles = new ArrayList<Particle>();
   mag_fields = new ArrayList<MagneticField>();
   electric_fields = new ArrayList<ElectricField>();
@@ -31,12 +33,11 @@ void setup() {
   size(1280, 640);
   stroke(255);
 
-  // add magnetic fields to the system
-  mag_fields.add(new MagneticField(0, 160, 320, 400, 1));
-  mag_fields.add(new MagneticField(880, 160, 320, 400, 1));
-
-  // add electric fields to the system
-  electric_fields.add(new ElectricField(width/4 + 150, height/4, 300, 400, 5, true));
+  // start demo system
+//  demo();
+  
+  // start cyclotron
+  cyclotron();
 
   // add particles to the system
   float xi = width/2;
@@ -47,7 +48,6 @@ void setup() {
 //  particles.add(new Particle(20, 500, 4, 0, -1, 20));
 //  particles.add(new Particle(width - 20, 500 , 8, -2, -1, 20));
   
-  addRandomParticles(4);
 
 }
 
@@ -110,5 +110,35 @@ void addRandomParticles(int num)
     particles.add(new Particle((float) Math.random() * width, (float) Math.random() * height, (float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10,
     (Math.random() > 0.5) ? -1.0 : 1.0, 20));
   }
+}
+
+// Below are a series of different field systems
+
+void demo()
+{
+  // add magnetic fields to the system
+  mag_fields.add(new MagneticField(0, 160, 320, 400, 1));
+  mag_fields.add(new MagneticField(880, 160, 320, 400, 1));
+
+  // add electric fields to the system
+  electric_fields.add(new ElectricField(width/4 + 150, height/4, 300, 400, 5, true));
+  
+  addRandomParticles(4);
+}
+
+void cyclotron()
+{
+  // add magnetic fields to system
+  mag_fields.add(new MagneticField(0, 0, 640, 500, 6));
+  mag_fields.add(new MagneticField(750, 0, 640, 500, 6)); 
+  
+  // add electric fields to system
+  electric_fields.add(new ElectricField(540, 10, 300, 215, 5, false));
+  electric_fields.add(new ElectricField(540, 310, 300, 215, 5, true));
+  
+  // add particles
+  particles.add(new Particle(600, 300, -4, 0, 1, 20));
+  
+  
 }
 

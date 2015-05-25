@@ -17,6 +17,7 @@ class Particle{
   
   // constant 1/(4piE_0)
   float k = 900; 
+ 
   
   public Particle() {
     xpos = 30;
@@ -58,12 +59,13 @@ class Particle{
       accelerateInChargeField(dt, particle);
     }
 
-    sides();
+    bounceOffSides();
     xpos += xspeed * dt;
     ypos += yspeed * dt;
   }
   
-  private void sides(){
+  
+  private void bounceOffSides(){
   
     // side window barriers
     if (xpos > width && xspeed > 0) { 
@@ -114,6 +116,18 @@ class Particle{
     yspeed += yacc * dt;
   }
   
+  // accelerate this particle in a given electric field
+  private void accelerateInElectricField(float dt, ElectricField field){
+    float xacc = (field.strength * charge) / mass;
+    // if field is not in the rightward direction
+    if (!field.right){
+      xacc *= -1;
+    }
+    
+    xspeed += xacc * dt;   
+  }
+  
+  // accelerate this particle by the reactionary electric force of another
   private void accelerateInChargeField(float dt, Particle other)
   {
     float r = getDist(xpos, ypos, other.xpos, other.ypos);
@@ -137,29 +151,6 @@ class Particle{
       yspeed += acc * ry * dt;
     }
   }
-
-  // accelerate this particle in a given electric field
-  private void accelerateInElectricField(float dt, ElectricField field){
-    float xacc = (field.strength * charge) / mass;
-    // if field is not in the rightward direction
-    if (!field.right){
-      xacc *= -1;
-    }
-    
-    xspeed += xacc * dt;   
-  }
-  
-  private float getDist(float x1, float y1, float x2, float y2)
-  {
-    return (float) Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
-  }
-  
-  
-  
-  // magnitude of a vector
-  private float getMagnitude(float a, float b){
-      return (float) Math.sqrt(a * a + b * b);
-  }
   
   // magnitude of the acceleration caused by the magnetic field
   private float getMagAcc(MagneticField field){
@@ -167,6 +158,16 @@ class Particle{
     return (charge * speed * field.strength * -1) / mass;
   }
   
+  // get the distance between two points
+  private float getDist(float x1, float y1, float x2, float y2)
+  {
+    return (float) Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+  }
+  
+  // magnitude of a vector
+  private float getMagnitude(float a, float b){
+      return (float) Math.sqrt(a * a + b * b);
+  }
   
 }
 

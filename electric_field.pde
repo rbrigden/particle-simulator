@@ -44,7 +44,7 @@ public class ElectricField{
   void buildField(){
     line(x1, y1, x1, y1 + field_height);
     line(x2, y1, x2, y1 + field_height);
-    
+
     for (int i = 0; i <= (int) field_height/30 ; i++)
     {
       float y = y1 + 30 * i;
