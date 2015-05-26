@@ -8,6 +8,7 @@
 //  https://processing.org/examples/multipleparticlesystems.html
 //  https://processing.org/examples/button.html
 //  http://www.lagers.org.uk/g4p/
+//  https://processing.org/tutorials/data/
 //  Asked Jake Herman about implementing multiple particles in simulation, advised me to separate update and draw methods.
 //  He also helped me implement a technique to update the acceleration many times between frames in order to increase accuracy.
 //  Abhinav Venigalla taught me how to change the color of specific objects (in this case the particles) by turning the fill on
@@ -21,6 +22,7 @@
 // GUI package for Processing
 import g4p_controls.*;
 
+
 GSlider sdr;
 
 ArrayList<Particle> particles;
@@ -28,6 +30,8 @@ ArrayList<MagneticField> mag_fields;
 ArrayList<ElectricField> electric_fields;
 
 boolean inCycle;
+boolean withAverageVelocity;
+
 
 void setup() {
   // initialize particle and field lists
@@ -48,17 +52,18 @@ void setup() {
   // custom system
   custom();
 
+  // displays average velocity
+//  withAverageVelocity(particles);
+
   // add particles to the system
   float xi = width/2;
   float yi = height/2;
 
-//  particles.add(new Particle(20, 50, 4, -2, 1, 20));
-//  particles.add(new Particle(width - 20, 50, -4, -2, 1, 20));
-//  particles.add(new Particle(20, 500, 4, 0, -1, 20));
-//  particles.add(new Particle(width - 20, 500 , 8, -2, -1, 20));
+  // create data file
   
-
 }
+
+int count = 0;
 
 void draw() {
   
@@ -131,11 +136,28 @@ void draw() {
     textSize(18);
     fill(0, 102, 153);
     String multiplier = "Field Multiplier: " + sdr.getValueF();
-    text(multiplier, 70, height - 110  );
-    
+    text(multiplier, 70, height - 110  );    
+  }
+  
+  // display average velocity of particles
+  if (withAverageVelocity)
+  {
+    float avgVel = getAverageVelocity(particles);
+    String str = "Average velocity = " + avgVel;
+    textSize(32);
+    fill(0, 102, 153);
+    text(str, 100, 100); 
+//    writer.println(count + "," + avgVel);
+//    if (count == 10000000)
+//    {
+//      writer.close();
+//    }
+//    count++;
   }
   
 }
+
+
 
 void addRandomParticles(int num)
 {
@@ -197,7 +219,8 @@ void cyclotron()
 
 // custom system
 void custom(){
-//    // add magnetic fields to the system
+  withAverageVelocity = true;
+  // add magnetic fields to the system
 //  mag_fields.add(new MagneticField(0, 160, 320, 400, 1));
 //  mag_fields.add(new MagneticField(880, 160, 320, 400, 1));
 //
@@ -205,6 +228,17 @@ void custom(){
 //  electric_fields.add(new ElectricField(width/4 + 150, height/4, 300, 400, 5, true));
   addRandomParticles(10);
 
+
+}
+
+float getAverageVelocity(ArrayList<Particle> particles)
+{
+  float total = 0;
+  for (Particle p : particles)
+  {
+    total += getMagnitude(p.xspeed, p.yspeed);
+  }
+  return total / (float) particles.size();
 }
 
 
