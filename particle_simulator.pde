@@ -59,7 +59,6 @@ void setup() {
   float xi = width/2;
   float yi = height/2;
 
-  // create data file
   
 }
 
@@ -147,12 +146,7 @@ void draw() {
     textSize(32);
     fill(0, 102, 153);
     text(str, 100, 100); 
-//    writer.println(count + "," + avgVel);
-//    if (count == 10000000)
-//    {
-//      writer.close();
-//    }
-//    count++;
+
   }
   
 }
@@ -172,6 +166,18 @@ void addRandomParticles(int num)
 float getMagnitude(float a, float b){
     return (float) Math.sqrt(a * a + b * b);
 }
+
+// get the average velocity of the particles in the system
+float getAverageVelocity(ArrayList<Particle> particles)
+{
+  float total = 0;
+  for (Particle p : particles)
+  {
+    total += getMagnitude(p.xspeed, p.yspeed);
+  }
+  return total / (float) particles.size();
+}
+
 
 // Below are a series of different field systems
 
@@ -231,15 +237,7 @@ void custom(){
 
 }
 
-float getAverageVelocity(ArrayList<Particle> particles)
-{
-  float total = 0;
-  for (Particle p : particles)
-  {
-    total += getMagnitude(p.xspeed, p.yspeed);
-  }
-  return total / (float) particles.size();
-}
+
 
 
 
