@@ -58,15 +58,7 @@ public class ElectricField{
         line(midx, y, midx + 5, y + 5);
         line(midx, y, midx + 5, y - 5);
       }
-      
-      
     }
-  
   }
-  
- 
-    
-  
-  
 }
 
