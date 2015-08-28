@@ -1,6 +1,6 @@
 # Particle Simulator
 This program simulates charged particles in an environment with electromagnetic forces at play. 
-Written using the Processing platform. 
+Written in the Processing platform. 
 
 # Download & Run
 To run the simulator (in its current, primitive form) clone the repository into a local directory and navigate
